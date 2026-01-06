@@ -1,0 +1,28 @@
+"""
+Knowledge Task Configuration
+Optimized for factual Q&A and information retrieval
+"""
+
+# Inherit from base config
+_base_: base_config.yaml
+
+training:
+  batch_size: 16                 # Smaller batch for knowledge tasks
+  learning_rate_gate: 5.0e-5     # Lower LR for stable gating
+
+adaptive_rmin:
+  default_r_min:
+    knowledge: 0.98              # Higher r_min for more discrete tokens
+    stem: 0.95
+    general: 0.96
+  
+  target_hidden_ratio: 0.12      # Lower latent usage for knowledge
+
+model:
+  model_name: "Qwen/Qwen-1.5B"
+
+# Task-specific data
+dataset:
+  train_path: "data/knowledge_train.jsonl"
+  eval_path: "data/knowledge_eval.jsonl"
+  task_type: "knowledge"

@@ -1,0 +1,106 @@
+"""
+HRPO-X Configuration Module
+Base configuration for HRPO-X v2.2f training
+"""
+
+training:
+  # [Eq. 6] Core HRPO parameters
+  beta: 0.005                    # KL coefficient
+  learning_rate_base: 5.0e-6     # Base model LR
+  learning_rate_gate: 1.0e-4     # Gating network LR
+  learning_rate_lambda: 1.0e-3   # Lagrange multiplier LR
+  
+  # Training dynamics
+  batch_size: 32
+  gradient_accumulation_steps: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  warmup_ratio: 0.1
+  
+  # Gating parameters
+  tau: 0.5                       # Temperature for gating
+  c: 8.0                         # Constraint for projection
+  group_size_simple: 4
+  group_size_complex: 8
+
+# [P1] Importance Sampling Extension
+importance_sampling:
+  enabled: true
+  max_lag_steps: 3               # k <= 3 tolerance
+  epsilon_clip_base: 0.2         # Base PPO clipping
+  warmup_steps: 100              # [P1] Adaptive epsilon warmup
+  max_kl_reject: 0.01            # Safety rejection threshold
+  
+# [P1][P2] Adaptive r_min Controller
+adaptive_rmin:
+  enabled: true
+  target_hidden_ratio: 0.15      # Desired latent utilization
+  search_range: [0.90, 0.99]     # r_min bounds
+  adaptation_rate: 0.1           # Update step size
+  max_single_change: 0.05        # Max delta per step
+  convergence_threshold: 0.001   # Convergence criterion
+  warmup_steps: 100
+  
+  # [P2] Task-specific defaults
+  default_r_min:
+    knowledge: 0.98
+    stem: 0.95
+    general: 0.96
+
+# [P0] Distributional Ghost Mode
+ghost_mode:
+  enabled: true
+  traffic_percent: 25.0          # [P0] Increased from 10%
+  min_samples: 250               # [P0] Increased from 100
+  confidence: 0.99
+  bootstrap_iterations: 1000     # [P0] Bootstrap CI
+  
+  # 4-Metric validation
+  checks:
+    error_rate:
+      threshold: 0.01            # 1% max error rate
+      weight: 0.4
+    
+    reward_kl_divergence:
+      threshold: 0.1
+      weight: 0.3
+    
+    length_variance:
+      min: 0.5
+      max: 2.0
+      weight: 0.2
+    
+    delimiter_pattern:
+      max_diff: 0.5
+      weight: 0.1
+
+# [P0] Network Configuration
+network:
+  broadcast_timeout: 5.0         # Hash ACK timeout (seconds)
+  grace_period: true             # [P0] Partition tolerance
+  redis_url: "redis://localhost:6379/0"
+  num_workers: 8
+
+# Model Configuration
+model:
+  model_name: "Qwen/Qwen-1.5B"
+  max_sequence_length: 2048
+  hidden_size: 1536
+  num_hidden_layers: 28
+  
+# Monitoring
+monitoring:
+  log_interval: 10
+  eval_interval: 100
+  save_interval: 500
+  wandb_project: "hrpo-x-v2.2f"
+  
+  # Key metrics to track
+  metrics:
+    - "hrpo_latency_p95"
+    - "hrpo_importance_ratio_mean"
+    - "hrpo_policy_lag_steps_mean"
+    - "hrpo_stale_discard_rate"
+    - "hrpo_rmin_current"
+    - "hrpo_ghost_reward_kl"
+    - "hrpo_hidden_ratio"

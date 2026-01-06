@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrpox-core
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hrpox
+  template:
+    metadata:
+      labels:
+        app: hrpox
+    spec:
+      containers:
+      - name: hrpox
+        image: ghcr.io/your-org/hrpo-x:latest
+        ports:
+        - containerPort: 8000

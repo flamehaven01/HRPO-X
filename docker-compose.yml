@@ -1,0 +1,195 @@
+# Docker Compose for HRPO-X
+# Multi-service orchestration for development and production
+
+version: '3.9'
+
+# ============================================================================
+# Services
+# ============================================================================
+services:
+
+  # ==========================================================================
+  # Core Service - Main HRPO-X application
+  # ==========================================================================
+  hrpox-core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: hrpox:1.0.0
+    container_name: hrpox-core
+    restart: unless-stopped
+    ports:
+      - "8000:8000"  # Main API
+      - "9090:9090"  # Prometheus metrics
+    volumes:
+      - ./data:/data
+      - ./models:/models
+      - ./logs:/app/logs
+    environment:
+      - HRPO_ENV=production
+      - HRPO_LOG_LEVEL=INFO
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    networks:
+      - hrpox-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ==========================================================================
+  # Training Service - GPU-accelerated training
+  # ==========================================================================
+  hrpox-trainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: training
+    image: hrpox-training:1.0.0
+    container_name: hrpox-trainer
+    restart: "no"
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+      - HRPO_ENV=training
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./data:/data
+      - ./models:/models
+      - ./checkpoints:/checkpoints
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+    networks:
+      - hrpox-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # ==========================================================================
+  # Redis - Hash broadcast and state management
+  # ==========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: hrpox-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-changeme}
+    networks:
+      - hrpox-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==========================================================================
+  # Prometheus - Metrics collection
+  # ==========================================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: hrpox-prometheus
+    restart: unless-stopped
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - hrpox-network
+    depends_on:
+      - hrpox-core
+
+  # ==========================================================================
+  # Grafana - Metrics visualization
+  # ==========================================================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: hrpox-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - hrpox-network
+    depends_on:
+      - prometheus
+
+  # ==========================================================================
+  # TensorBoard - Training visualization
+  # ==========================================================================
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    container_name: hrpox-tensorboard
+    restart: unless-stopped
+    ports:
+      - "6006:6006"
+    volumes:
+      - ./logs/tensorboard:/logs
+    command: tensorboard --logdir=/logs --host=0.0.0.0
+    networks:
+      - hrpox-network
+
+# ============================================================================
+# Networks
+# ============================================================================
+networks:
+  hrpox-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# ============================================================================
+# Volumes
+# ============================================================================
+volumes:
+  redis-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+
+# ============================================================================
+# Configuration Notes
+# ============================================================================
+# 
+# Usage:
+#   Development:  docker-compose up -d
+#   Production:   docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#   Training:     docker-compose up hrpox-trainer
+#
+# Environment Variables (create .env file):
+#   REDIS_PASSWORD=your-secure-password
+#   GRAFANA_USER=admin
+#   GRAFANA_PASSWORD=your-secure-password
+#   HRPO_ENV=production
+#
+# GPU Support:
+#   Requires: nvidia-docker2 installed
+#   Test: docker run --rm --gpus all nvidia/cuda:12.1.0-base-ubuntu22.04 nvidia-smi

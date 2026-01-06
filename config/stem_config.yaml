@@ -1,0 +1,30 @@
+"""
+STEM Task Configuration
+Optimized for mathematical reasoning and code generation
+"""
+
+# Inherit from base config
+_base_: base_config.yaml
+
+training:
+  batch_size: 8                  # Smaller batch for complex reasoning
+  learning_rate_gate: 1.0e-4     # Higher LR for dynamic gating
+  group_size_complex: 8          # Larger groups for reasoning
+
+adaptive_rmin:
+  default_r_min:
+    knowledge: 0.98
+    stem: 0.95                   # Lower r_min allows more latent reasoning
+    general: 0.96
+  
+  target_hidden_ratio: 0.18      # Higher latent usage for STEM
+
+model:
+  model_name: "Qwen/Qwen-3B"     # Larger model for reasoning
+  max_sequence_length: 4096      # Longer context for code/math
+
+# Task-specific data
+dataset:
+  train_path: "data/stem_train.jsonl"
+  eval_path: "data/stem_eval.jsonl"
+  task_type: "stem"

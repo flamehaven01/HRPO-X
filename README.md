@@ -35,6 +35,8 @@ This implementation is based on our accepted NeurIPS 2025 paper "Hybrid Latent R
 
 **Full Paper**: See [`docs/paper.pdf`](docs/paper.pdf) for the complete manuscript.
 
+**Production Hardening Guide**: See [`docs/HRPO-X_Production_Hardening.pdf`](docs/HRPO-X_Production_Hardening.pdf) for comprehensive deployment and operational best practices.
+
 ### Production Enhancements
 
 1. **[P1] IS Cold Start Stability** - Adaptive epsilon scheduling for early training

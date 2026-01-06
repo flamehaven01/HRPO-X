@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] - 2026-01-06
+
+### [+] Fixed
+- **CI/CD Import Errors**: Resolved `ModuleNotFoundError: No module named 'hrpo_core_v2_2'` in test suite
+- **Package Structure**: Reorganized `hrpox` package for proper module imports
+- **Module Path Issues**: Fixed import paths in test suite with proper sys.path management
+
+### [*] Changed
+- **Simplified Package**: `hrpox` now uses root-level `hrpo_core_v2_2` module directly
+- **Dependency Optimization**: Removed unnecessary ML packages (transformers, datasets, accelerate, etc.)
+- **Import System**: Updated `__init__.py` with dynamic sys.path for proper module exposure
+- **CLI Entry Point**: Enhanced `__main__.py` for cleaner CLI execution
+
+### [!] Improved
+- **Faster Installation**: Reduced from ~15 packages to 5 core dependencies
+- **Lighter Deployment**: Minimal footprint for production environments
+- **Better Organization**: Cleaner module structure for maintainability
+- **Import Reliability**: Robust path management prevents import failures
+
+---
+
 ## [1.0.0] - 2026-01-06
 
 ### [*] Initial Release - "Sovereign Hybrid Reasoning with Adaptive Efficiency"

@@ -1,0 +1,12 @@
+# HRPO-X LLM Training Integration (Optional)
+# Only install if integrating with language model training pipelines
+
+-r requirements.txt
+
+# LLM Training
+transformers>=4.30.0
+datasets>=2.12.0
+accelerate>=0.20.0
+
+# Distributed Training
+redis>=4.5.0

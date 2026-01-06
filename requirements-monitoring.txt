@@ -1,0 +1,8 @@
+# HRPO-X Production Monitoring (Optional)
+# Install for advanced metrics and tracking
+
+-r requirements.txt
+
+# Monitoring
+prometheus-client>=0.17.0
+wandb>=0.15.0

@@ -32,10 +32,23 @@ setup(
         "dev": [
             "pytest>=7.3.0",
             "pytest-cov>=4.1.0",
+            "pytest-mock>=3.11.0",
             "black>=23.3.0",
             "isort>=5.12.0",
             "flake8>=6.0.0",
             "mypy>=1.3.0",
+            "pyyaml>=6.0",
+            "tqdm>=4.65.0",
+        ],
+        "llm": [
+            "transformers>=4.30.0",
+            "datasets>=2.12.0",
+            "accelerate>=0.20.0",
+            "redis>=4.5.0",
+        ],
+        "monitoring": [
+            "prometheus-client>=0.17.0",
+            "wandb>=0.15.0",
         ],
         "docs": [
             "sphinx>=5.0.0",

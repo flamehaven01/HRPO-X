@@ -10,8 +10,6 @@ from hrpox.__main__ import (
     TaskAwareAdaptiveRminController,
     DistributionalGhostMode,
     PolicyHashManager,
-    HRPOAgent,
-    run_demo,
 )
 
 __version__ = "1.0.1"
@@ -22,6 +20,4 @@ __all__ = [
     "TaskAwareAdaptiveRminController",
     "DistributionalGhostMode",
     "PolicyHashManager",
-    "HRPOAgent",
-    "run_demo",
 ]

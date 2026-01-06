@@ -83,3 +83,19 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Development/Internal documentation (not for users)
+*_SUMMARY.md
+*_STATUS.md
+*_INSTRUCTIONS.md
+*_GUIDE.md
+PROJECT_*.md
+CREATION_*.md
+ENHANCEMENT_*.md
+VERSION_UPDATE_*.md
+CI_CD_SUMMARY.md
+PUSH_INSTRUCTIONS.md
+GIT_RELEASE_GUIDE.md
+
+# Git bundles
+*.bundle

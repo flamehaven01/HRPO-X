@@ -1,18 +1,18 @@
-# HRPO-X v1.0.0 - Hybrid Reasoning with Policy Optimization
+# HRPO-X v1.0.1 - Hybrid Reasoning with Policy Optimization
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](CHANGELOG.md)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](tests/)
 [![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen.svg)](tests/)
 [![Paper](https://img.shields.io/badge/Paper-NeurIPS%202025-b31b1b.svg)](docs/paper.pdf)
 [![Documentation](https://img.shields.io/badge/docs-comprehensive-blue.svg)](docs/)
 
-**Version:** 1.0.0 (Initial Release)  
+**Version:** 1.0.1 (CI/CD & Dependency Optimization)  
 **Release Date:** 2026-01-06  
 **Codename:** "Sovereign Hybrid Reasoning with Adaptive Efficiency"
 
-**Status:** [+] PRODUCTION READY (Initial Stable Release)
+**Status:** [+] PRODUCTION READY (Stable Release)
 
 **Paper Reference:** "Hybrid Latent Reasoning via Reinforcement Learning" (NeurIPS 2025 Spotlight)
 
@@ -22,7 +22,7 @@
 
 ## [*] Overview
 
-HRPO-X v1.0.0 implements the complete **Hybrid Latent Reasoning via Reinforcement Learning** algorithm from our NeurIPS 2025 paper, enhanced with 5 critical production patches for real-world deployment.
+HRPO-X v1.0.1 implements the complete **Hybrid Latent Reasoning via Reinforcement Learning** algorithm from our NeurIPS 2025 paper, enhanced with 5 critical production patches for real-world deployment.
 
 ### About the Paper
 

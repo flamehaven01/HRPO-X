@@ -14,8 +14,9 @@ setup(
     description="Hybrid Reasoning with Policy Optimization - Production Implementation",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/flamehaven-labs/hrpo-x",
-    packages=find_packages(exclude=["tests", "docs", "scripts"]),
+    url="https://github.com/flamehaven01/HRPO-X",
+    packages=["hrpox"],
+    py_modules=["hrpo_core_v2_2"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Science/Research",

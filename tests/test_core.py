@@ -6,7 +6,7 @@ Run: pytest tests/test_core.py -v
 import pytest
 import torch
 import numpy as np
-from hrpo_core_v2_2 import (
+from hrpox import (
     HRPOConfig,
     adaptive_epsilon_schedule,
     importance_weighted_hrpo_loss,

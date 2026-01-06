@@ -96,9 +96,9 @@ class TestAdaptiveRmin:
     
     def test_warmup_returns_none(self, controller):
         """Should not update during warmup"""
-        for i in range(100):
+        for i in range(99):  # 0-98, step_count will be 1-99
             r_min = controller.step(0.15, "test query")
-            assert r_min is None
+            assert r_min is None, f"Expected None at step {i+1}, got {r_min}"
     
     def test_convergence_detection(self, controller):
         """Should detect convergence when error small"""

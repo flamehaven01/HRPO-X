@@ -8,7 +8,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="hrpo-x",
-    version="1.0.0",
+    version="1.0.1",
     author="CLI C01",
     author_email="cli@flamehaven.io",
     description="Hybrid Reasoning with Policy Optimization - Production Implementation",

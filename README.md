@@ -7,6 +7,8 @@ HRPO-X is a research prototype with:
 
 This is not production software and does not claim full paper compliance.
 
+Roadmap: see `roadmap.md`.
+
 ---
 
 ## Scope

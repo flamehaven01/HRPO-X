@@ -2,7 +2,7 @@ import math
 
 import torch
 
-from hrpo_paper_pipeline import MiniHRPOTrainer, MiniPipelineConfig, run_mini_pipeline
+from hrpox.paper_pipeline import MiniHRPOTrainer, MiniPipelineConfig, run_mini_pipeline
 
 
 def test_mini_pipeline_metrics_keys():

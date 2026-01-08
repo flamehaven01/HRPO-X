@@ -10,12 +10,13 @@ tooling.
 
 ```
 hrpo-x/
-|-- hrpo_core_v2_2.py        # Core implementation (prototype utilities)
-|-- hrpo_paper_core.py       # Clean-room paper primitives (Eq3, Eq4, Eq6)
-|-- hrpo_paper_pipeline.py   # Mini pipeline demo
-|-- hrpo_paper_trainer.py    # Full trainer scaffold (rollouts, rewards, buffer)
 |-- hrpox/
-|   `-- __init__.py          # Convenience re-exports
+|   |-- core_v2_2.py         # Core implementation (prototype utilities)
+|   |-- paper_core.py        # Clean-room paper primitives (Eq3, Eq4, Eq6)
+|   |-- paper_pipeline.py    # Mini pipeline demo
+|   |-- paper_trainer.py     # Full trainer scaffold (rollouts, rewards, buffer)
+|   |-- __init__.py          # Convenience re-exports
+|   `-- __main__.py          # CLI entry point
 |-- examples/
 |   `-- simple_demo.py       # Runnable demos
 |-- tests/

@@ -17,7 +17,7 @@ This release removes exaggerated claims and aligns documentation with actual imp
 - Rewrote docs/ARCHITECTURE.md to match the single-file prototype
 - Rewrote SECURITY.md with prototype-safe scope
 - Updated setup_and_verify.py instructions and removed training references
-- Aligned hrpo_core_v2_2.py and hrpox/__init__.py headers with prototype status
+- Aligned hrpox/core_v2_2.py and hrpox/__init__.py headers with prototype status
 
 **File Cleanup:**
 - Removed k8s/ directory (aspirational, not implemented)
@@ -40,7 +40,7 @@ This release removes exaggerated claims and aligns documentation with actual imp
 
 **Verified:**
 - All 13 unit tests still pass
-- Core implementation (hrpo_core_v2_2.py) unchanged and functional
+- Core implementation (hrpox/core_v2_2.py) unchanged and functional
 - Package imports work correctly
 
 ### Status
@@ -67,7 +67,7 @@ This release removes exaggerated claims and aligns documentation with actual imp
 **Note:** This version contained significant exaggerations and unverified claims.
 See v1.0.1 for honest documentation.
 
-**Core Implementation:** hrpo_core_v2_2.py (463 lines)
+**Core Implementation:** hrpox/core_v2_2.py (463 lines)
 - HRPOConfig
 - adaptive_epsilon_schedule()
 - importance_weighted_hrpo_loss()

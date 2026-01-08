@@ -200,5 +200,5 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 60)
     print("All demos complete!")
-    print("See hrpo_core_v2_2.py for implementation details")
+    print("See hrpox/core_v2_2.py for implementation details")
     print("=" * 60)

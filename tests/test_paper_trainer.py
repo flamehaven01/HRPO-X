@@ -2,7 +2,7 @@ import math
 
 import torch
 
-from hrpo_paper_trainer import (
+from hrpox.paper_trainer import (
     ExactMatchRewardEvaluator,
     PaperHRPOTrainer,
     PaperTrainerConfig,

@@ -49,7 +49,7 @@ def main() -> int:
         print("[!] Please upgrade to Python 3.10 or higher")
         return 1
 
-    if not pathlib.Path("hrpo_core_v2_2.py").exists():
+    if not pathlib.Path("hrpox/core_v2_2.py").exists():
         print("[-] Error: Must run from HRPO-X root directory")
         return 1
 
@@ -74,7 +74,7 @@ def main() -> int:
     run_command(f"{pip_cmd} install -r requirements.txt", "Installing requirements")
 
     print_header("Running HRPO-X Core Demo")
-    if run_command(f"{python_cmd} hrpo_core_v2_2.py", "Testing core functionality"):
+    if run_command(f"{python_cmd} -m hrpox", "Testing core functionality"):
         print("[+] Core demo completed successfully")
 
     print_header("Running Test Suite")
@@ -96,7 +96,7 @@ Quick Start Commands:
   $ venv\\Scripts\\activate
 
   # Run core demo
-  $ python hrpo_core_v2_2.py
+  $ python -m hrpox
 
   # Run simple demo
   $ python examples/simple_demo.py
@@ -106,9 +106,9 @@ Quick Start Commands:
 
 Documentation:
   - README.md
-  - README_HONEST.md
   - docs/ARCHITECTURE.md
   - docs/PAPER_TO_CODE_MAP.md
+  - roadmap.md
 
 For issues or questions, see: https://github.com/your-org/hrpo-x
 """

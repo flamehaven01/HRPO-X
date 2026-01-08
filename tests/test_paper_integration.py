@@ -1,4 +1,4 @@
-from hrpo_core_v2_2 import paper_alignment_demo
+from hrpox.core_v2_2 import paper_alignment_demo
 
 
 def test_paper_alignment_demo_metrics():

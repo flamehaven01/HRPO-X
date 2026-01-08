@@ -18,10 +18,10 @@ Paper (hlr.txt):
 
 HRPO-X:
 - Status: IMPLEMENTED (core + mini + full trainer scaffold)
-- Location: hrpo_paper_core.py::project_hidden_to_embedding
+- Location: hrpox/paper_core.py::project_hidden_to_embedding
 - Pipelines:
-  - hrpo_paper_pipeline.py::MiniHRPOTrainer.rollout_group uses the projection.
-  - hrpo_paper_trainer.py::PaperHRPOTrainer._rollout_group uses the projection.
+  - hrpox/paper_pipeline.py::MiniHRPOTrainer.rollout_group uses the projection.
+  - hrpox/paper_trainer.py::PaperHRPOTrainer._rollout_group uses the projection.
 
 ### Eq(4): Hybrid gating mechanism (think span only)
 Paper (hlr.txt):
@@ -33,10 +33,10 @@ Paper (hlr.txt):
 
 HRPO-X:
 - Status: IMPLEMENTED (core + mini + full trainer scaffold)
-- Location: hrpo_paper_core.py::hybrid_gating_step
+- Location: hrpox/paper_core.py::hybrid_gating_step
 - Pipelines:
-  - hrpo_paper_pipeline.py::MiniHRPOTrainer.rollout_group applies think-span masking.
-  - hrpo_paper_trainer.py::PaperHRPOTrainer._rollout_group applies think-span masking.
+  - hrpox/paper_pipeline.py::MiniHRPOTrainer.rollout_group applies think-span masking.
+  - hrpox/paper_trainer.py::PaperHRPOTrainer._rollout_group applies think-span masking.
 
 ### Eq(6): HRPO objective (on-policy, group-standardized rewards)
 Paper (hlr.txt):
@@ -46,11 +46,11 @@ Paper (hlr.txt):
 
 HRPO-X:
 - Status: IMPLEMENTED (mini + full trainer scaffold)
-- Current: hrpo_paper_core.py::hrpo_loss implements the paper-style objective
+- Current: hrpox/paper_core.py::hrpo_loss implements the paper-style objective
   without ratio/IS.
 - Pipelines:
-  - hrpo_paper_pipeline.py::MiniHRPOTrainer.train_step uses hrpo_loss with a token mask.
-  - hrpo_paper_trainer.py::PaperHRPOTrainer.train_step uses hrpo_loss with a token mask.
+  - hrpox/paper_pipeline.py::MiniHRPOTrainer.train_step uses hrpo_loss with a token mask.
+  - hrpox/paper_trainer.py::PaperHRPOTrainer.train_step uses hrpo_loss with a token mask.
 
 ### Rollout design
 Paper (hlr.txt):
@@ -60,8 +60,8 @@ Paper (hlr.txt):
 HRPO-X:
 - Status: IMPLEMENTED (mini + full trainer scaffold)
 - Locations:
-  - hrpo_paper_pipeline.py::MiniHRPOTrainer.rollout_group
-  - hrpo_paper_trainer.py::PaperHRPOTrainer._rollout_group
+  - hrpox/paper_pipeline.py::MiniHRPOTrainer.rollout_group
+  - hrpox/paper_trainer.py::PaperHRPOTrainer._rollout_group
 - Notes: ToyPolicy and small vocab; demo-scale only.
 
 ## HRPO-X Existing Components (Non-paper additions)

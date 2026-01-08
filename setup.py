@@ -15,8 +15,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/flamehaven01/HRPO-X",
-    packages=["hrpox"],
-    py_modules=["hrpo_core_v2_2"],
+    packages=setuptools.find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",

@@ -1,9 +1,9 @@
 # HRPO-X (Research Prototype)
 
 HRPO-X is a research prototype with:
-- prototype utilities in `hrpo_core_v2_2.py`
-- clean-room paper primitives (Eq3/Eq4/Eq6) in `hrpo_paper_core.py`
-- demo-scale pipelines in `hrpo_paper_pipeline.py` and `hrpo_paper_trainer.py`
+- prototype utilities in `hrpox/core_v2_2.py`
+- clean-room paper primitives (Eq3/Eq4/Eq6) in `hrpox/paper_core.py`
+- demo-scale pipelines in `hrpox/paper_pipeline.py` and `hrpox/paper_trainer.py`
 
 This is not production software and does not claim full paper compliance.
 
@@ -42,7 +42,7 @@ pytest tests/ -v
 Run demos:
 
 ```bash
-python hrpo_core_v2_2.py
+python -m hrpox
 python examples/simple_demo.py
 ```
 
@@ -52,10 +52,6 @@ python examples/simple_demo.py
 
 ```
 hrpo-x/
-├── hrpo_core_v2_2.py
-├── hrpo_paper_core.py
-├── hrpo_paper_pipeline.py
-├── hrpo_paper_trainer.py
 ├── hrpox/
 ├── tests/
 └── docs/

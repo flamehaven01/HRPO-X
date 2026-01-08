@@ -27,7 +27,7 @@ import logging
 import time
 import json
 import math
-import hrpo_paper_core
+from . import paper_core
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -417,7 +417,7 @@ class PolicyHashManager:
 # ==============================================================================
 
 def paper_alignment_demo(
-    config: typing.Optional[hrpo_paper_core.PaperHRPOConfig] = None,
+    config: typing.Optional[paper_core.PaperHRPOConfig] = None,
     group_size: int = 3,
     seq_len: int = 5,
     vocab: int = 16,
@@ -428,7 +428,7 @@ def paper_alignment_demo(
     This is a demo only and does not implement a full training pipeline.
     """
     torch.manual_seed(0)
-    cfg = config or hrpo_paper_core.PaperHRPOConfig()
+    cfg = config or paper_core.PaperHRPOConfig()
 
     embedding = torch.randn(vocab, dim)
     logits = torch.randn(group_size, seq_len, vocab)
@@ -436,7 +436,7 @@ def paper_alignment_demo(
     token_ids = torch.argmax(probs, dim=-1)
     e_hat = embedding[token_ids]
 
-    h_proj, _ = hrpo_paper_core.project_hidden_to_embedding(logits, embedding, tau=cfg.tau, eps=cfg.eps)
+    h_proj, _ = paper_core.project_hidden_to_embedding(logits, embedding, tau=cfg.tau, eps=cfg.eps)
 
     w_a = torch.randn(dim, dim)
     b_a = torch.randn(dim)
@@ -447,7 +447,7 @@ def paper_alignment_demo(
     think_mask = torch.zeros(group_size, seq_len, dtype=torch.bool)
     think_mask[:, :-1] = True
 
-    e_next, gates = hrpo_paper_core.hybrid_gating_step(
+    e_next, gates = paper_core.hybrid_gating_step(
         e_hat,
         h_proj,
         w_a,
@@ -467,7 +467,7 @@ def paper_alignment_demo(
     token_mask = torch.zeros(group_size, seq_len, dtype=torch.bool)
     token_mask[:, -2:] = True
 
-    loss, metrics = hrpo_paper_core.hrpo_loss(
+    loss, metrics = paper_core.hrpo_loss(
         logp,
         rewards,
         ref_logp,

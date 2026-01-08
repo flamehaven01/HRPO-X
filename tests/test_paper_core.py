@@ -1,6 +1,6 @@
 import torch
 
-from hrpo_paper_core import (
+from hrpox import (
     PaperHRPOConfig,
     project_hidden_to_embedding,
     hybrid_gating_step,

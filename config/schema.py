@@ -4,24 +4,33 @@ HRPO-X v1.0.1 - Configuration Schema
 Pydantic-based validated configuration schema
 """
 
-from pydantic import BaseModel, Field, validator
-from typing import Dict, Optional
+import pydantic
 
 
-class ValidationConfig(BaseModel):
+class ValidationConfig(pydantic.BaseModel):
     """Validation settings"""
-    enabled: bool = Field(default=True, description="Enable validation")
-    level: str = Field(default="development", description="Validation level: development|testing|production")
-    fail_on_warning: bool = Field(default=True, description="Fail on warnings in dev mode")
-    collect_metrics: bool = Field(default=True, description="Collect validation metrics")
+    enabled: bool = pydantic.Field(default=True, description="Enable validation")
+    level: str = pydantic.Field(
+        default="development", description="Validation level: development|testing|production"
+    )
+    fail_on_warning: bool = pydantic.Field(
+        default=True, description="Fail on warnings in dev mode"
+    )
+    collect_metrics: bool = pydantic.Field(
+        default=True, description="Collect validation metrics"
+    )
     
     # Individual check toggles
-    equation_integrity: bool = Field(default=True, description="Validate Equations 3/4/6")
-    numerical_stability: bool = Field(default=True, description="Check NaN/Inf")
-    patch_behavior: bool = Field(default=True, description="Validate patches")
-    training_health: bool = Field(default=True, description="Training health checks")
+    equation_integrity: bool = pydantic.Field(
+        default=True, description="Validate Equations 3/4/6"
+    )
+    numerical_stability: bool = pydantic.Field(default=True, description="Check NaN/Inf")
+    patch_behavior: bool = pydantic.Field(default=True, description="Validate patches")
+    training_health: bool = pydantic.Field(
+        default=True, description="Training health checks"
+    )
     
-    @validator('level')
+    @pydantic.validator("level")
     def validate_level(cls, v):
         allowed = ['development', 'testing', 'production']
         if v not in allowed:
@@ -29,24 +38,28 @@ class ValidationConfig(BaseModel):
         return v
 
 
-class HRPOConfigSchema(BaseModel):
+class HRPOConfigSchema(pydantic.BaseModel):
     """Validated HRPO configuration schema"""
     
     # Core hyperparameters
-    beta: float = Field(default=0.005, ge=0.0, le=0.1, description="KL coefficient")
-    learning_rate_base: float = Field(default=5e-6, gt=0.0, description="Base learning rate")
+    beta: float = pydantic.Field(default=0.005, ge=0.0, le=0.1, description="KL coefficient")
+    learning_rate_base: float = pydantic.Field(
+        default=5e-6, gt=0.0, description="Base learning rate"
+    )
     
     # Gating parameters  
-    tau: float = Field(default=0.5, gt=0.0, description="Temperature parameter")
-    c: float = Field(default=8.0, gt=0.0, description="Scaling constant")
+    tau: float = pydantic.Field(default=0.5, gt=0.0, description="Temperature parameter")
+    c: float = pydantic.Field(default=8.0, gt=0.0, description="Scaling constant")
     
     # r_min range
-    r_min_range: tuple = Field(default=(0.90, 0.99), description="Min/max for r_min")
+    r_min_range: tuple = pydantic.Field(
+        default=(0.90, 0.99), description="Min/max for r_min"
+    )
     
     # Validation config
-    validation: ValidationConfig = Field(default_factory=ValidationConfig)
+    validation: ValidationConfig = pydantic.Field(default_factory=ValidationConfig)
     
-    @validator('r_min_range')
+    @pydantic.validator("r_min_range")
     def validate_rmin_range(cls, v):
         if len(v) != 2:
             raise ValueError('r_min_range must be (min, max)')

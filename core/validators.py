@@ -1,22 +1,21 @@
 """
-HRPO-X v1.0.1 - Core Validators
-================================
-Validates paper compliance for core equations (3, 4, 6)
+    HRPO-X v1.0.1 - Core Validators
+    ================================
+    Numerical and sanity checks for prototype components.
+    These utilities are optional and do not claim paper compliance.
+    """
 
-This module provides runtime validation for the mathematical properties
-of the core HRPO algorithm as specified in the NeurIPS 2025 paper.
-"""
+
 
 import torch
 import logging
 from typing import Dict, Optional, Tuple
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
 
 class EquationValidator:
-    """Validates core equations from the HRPO paper"""
+    """Validates core equation properties used in this prototype"""
     
     def __init__(self, strict: bool = True, log_violations: bool = True):
         """

@@ -1,7 +1,9 @@
 """
-HRPO-X Configuration Module
-Base configuration for HRPO-X v2.2f training
+Sample configuration for potential future training experiments.
+Not used by the current single-file prototype.
 """
+
+
 
 training:
   # [Eq. 6] Core HRPO parameters

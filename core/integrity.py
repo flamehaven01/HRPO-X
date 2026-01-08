@@ -7,11 +7,11 @@ Provides hash-based verification, numerical stability checks,
 and distribution property validation.
 """
 
-import torch
-import hashlib
 import logging
-from typing import Dict, List, Optional
-import numpy as np
+import typing
+
+import numpy
+import torch
 
 logger = logging.getLogger(__name__)
 
@@ -38,9 +38,9 @@ class CoreIntegrityChecker:
         
     def check_numerical_stability(
         self,
-        tensors: Dict[str, torch.Tensor],
+        tensors: typing.Dict[str, torch.Tensor],
         max_value: float = 1e6
-    ) -> Tuple[bool, Dict[str, any]]:
+    ) -> typing.Tuple[bool, typing.Dict[str, any]]:
         """
         Check tensors for numerical issues.
         
@@ -91,7 +91,7 @@ class CoreIntegrityChecker:
         self,
         logits: torch.Tensor,
         tolerance: float = 1e-6
-    ) -> Tuple[bool, Dict[str, any]]:
+    ) -> typing.Tuple[bool, typing.Dict[str, any]]:
         """
         Verify probability distribution properties.
         
@@ -163,9 +163,9 @@ class CoreIntegrityChecker:
     
     def check_gradient_properties(
         self,
-        gradients: Dict[str, torch.Tensor],
+        gradients: typing.Dict[str, torch.Tensor],
         max_grad_norm: float = 10.0
-    ) -> Tuple[bool, Dict[str, any]]:
+    ) -> typing.Tuple[bool, typing.Dict[str, any]]:
         """
         Check gradient health.
         
@@ -209,7 +209,7 @@ class CoreIntegrityChecker:
             diagnostics[f'{name}_std'] = grad.std().item()
         
         # Total gradient norm
-        total_norm = np.sqrt(total_norm)
+        total_norm = numpy.sqrt(total_norm)
         diagnostics['total_norm'] = total_norm
         diagnostics['max_grad_norm'] = max_grad_norm
         
@@ -227,9 +227,9 @@ class CoreIntegrityChecker:
     
     def check_loss_trajectory(
         self,
-        losses: List[float],
+        losses: typing.List[float],
         window_size: int = 10
-    ) -> Tuple[bool, Dict[str, any]]:
+    ) -> typing.Tuple[bool, typing.Dict[str, any]]:
         """
         Detect training anomalies from loss trajectory.
         
@@ -247,11 +247,11 @@ class CoreIntegrityChecker:
             diagnostics['insufficient_data'] = True
             return True, diagnostics
         
-        losses_array = np.array(losses)
+        losses_array = numpy.array(losses)
         
         # Check for NaN/Inf
-        has_nan = np.isnan(losses_array).any()
-        has_inf = np.isinf(losses_array).any()
+        has_nan = numpy.isnan(losses_array).any()
+        has_inf = numpy.isinf(losses_array).any()
         
         diagnostics['has_nan'] = has_nan
         diagnostics['has_inf'] = has_inf
@@ -263,30 +263,30 @@ class CoreIntegrityChecker:
         # Compute statistics
         if len(losses) >= window_size:
             recent = losses_array[-window_size:]
-            diagnostics['recent_mean'] = float(np.mean(recent))
-            diagnostics['recent_std'] = float(np.std(recent))
-            diagnostics['recent_min'] = float(np.min(recent))
-            diagnostics['recent_max'] = float(np.max(recent))
+            diagnostics['recent_mean'] = float(numpy.mean(recent))
+            diagnostics['recent_std'] = float(numpy.std(recent))
+            diagnostics['recent_min'] = float(numpy.min(recent))
+            diagnostics['recent_max'] = float(numpy.max(recent))
             
             # Check for divergence (loss increasing rapidly)
             if len(losses) >= window_size * 2:
                 older = losses_array[-(window_size*2):-window_size]
-                mean_increase = np.mean(recent) - np.mean(older)
+                mean_increase = numpy.mean(recent) - numpy.mean(older)
                 
                 diagnostics['mean_increase'] = float(mean_increase)
                 
                 # If loss increased by >50%, flag as potential divergence
-                if mean_increase > np.abs(np.mean(older)) * 0.5:
+                if mean_increase > numpy.abs(numpy.mean(older)) * 0.5:
                     is_normal = False
                     self._log_violation(f"Potential divergence: loss increased by {mean_increase:.2f}")
         
         # Check for oscillation (high variance)
         if len(losses) >= 5:
-            variance = np.var(losses_array[-5:])
-            mean_loss = np.abs(np.mean(losses_array[-5:]))
+            variance = numpy.var(losses_array[-5:])
+            mean_loss = numpy.abs(numpy.mean(losses_array[-5:]))
             
             diagnostics['variance'] = float(variance)
-            diagnostics['coefficient_of_variation'] = float(np.sqrt(variance) / (mean_loss + 1e-10))
+            diagnostics['coefficient_of_variation'] = float(numpy.sqrt(variance) / (mean_loss + 1e-10))
             
             # High coefficient of variation suggests instability
             if diagnostics['coefficient_of_variation'] > 2.0:
@@ -301,7 +301,7 @@ class CoreIntegrityChecker:
         self.integrity_violations.append(message)
         logger.error(f"[Integrity] {message}")
     
-    def get_violations(self) -> List[str]:
+    def get_violations(self) -> typing.List[str]:
         """Get all recorded violations"""
         return self.integrity_violations.copy()
     
@@ -322,7 +322,7 @@ def check_tensor_health(tensor: torch.Tensor, name: str = "tensor") -> bool:
     return True
 
 
-def check_model_parameters(model: torch.nn.Module) -> Dict[str, any]:
+def check_model_parameters(model: torch.nn.Module) -> typing.Dict[str, any]:
     """Check health of all model parameters"""
     diagnostics = {}
     all_healthy = True

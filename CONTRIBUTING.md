@@ -217,43 +217,25 @@ def _internal_helper():
 
 ### Test Coverage
 
-- **Minimum**: 80% coverage
-- **Target**: 96% coverage
-- **Critical paths**: 100% coverage
+- Current: 13 unit tests in tests/test_core.py
+- No enforced coverage threshold for this prototype
+- Add or update tests when changing core logic
 
 ### Writing Tests
 
 ```python
-# tests/test_new_feature.py
-import pytest
-from hrpo_x import NewFeature
+# tests/test_core_config.py
+from hrpox import HRPOConfig
 
-class TestNewFeature:
-    """Test suite for NewFeature"""
-    
-    @pytest.fixture
-    def config(self):
-        """Shared test configuration"""
-        return HRPOConfig()
-    
-    def test_basic_functionality(self, config):
-        """Test basic feature operation"""
-        feature = NewFeature(config)
-        result = feature.process()
-        assert result is not None
-    
-    def test_edge_case_empty_input(self, config):
-        """Test handling of empty input"""
-        feature = NewFeature(config)
-        with pytest.raises(ValueError):
-            feature.process([])
-    
-    @pytest.mark.slow
-    def test_performance_benchmark(self, config):
-        """Test performance meets requirements"""
-        # Slow tests marked for optional execution
-        pass
+class TestHRPOConfig:
+    """Basic sanity checks for the prototype config"""
+
+    def test_defaults(self):
+        config = HRPOConfig()
+        assert config.beta > 0
+        assert 0.0 < config.target_hidden_ratio < 1.0
 ```
+
 
 ### Running Tests
 
@@ -265,7 +247,7 @@ pytest tests/ -v
 pytest tests/test_core.py -v
 
 # With coverage
-pytest tests/ --cov=hrpo_x --cov-report=html
+pytest tests/ --cov=hrpox --cov-report=html
 
 # Skip slow tests
 pytest tests/ -v -m "not slow"
@@ -410,5 +392,5 @@ Contributors will be:
 
 **Thank you for contributing to HRPO-X!**
 
-**Paper**: "Hybrid Latent Reasoning via Reinforcement Learning" (NeurIPS 2025)  
+**Reference**: HRPO-inspired research notes (no verified paper implementation)
 **Maintained By**: Flamehaven Labs / CLI C01

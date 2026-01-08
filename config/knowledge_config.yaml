@@ -1,7 +1,9 @@
 """
-Knowledge Task Configuration
-Optimized for factual Q&A and information retrieval
+Sample configuration for potential future training experiments.
+Not used by the current single-file prototype.
 """
+
+
 
 # Inherit from base config
 _base_: base_config.yaml

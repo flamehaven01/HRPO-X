@@ -1,29 +1,33 @@
 """
-HRPO-X v1.0.0 (Initial Stable Release)
-========================================
-Codename: "Sovereign Hybrid Reasoning with Adaptive Efficiency"
-Paper Reference: Hybrid Latent Reasoning via Reinforcement Learning (NeurIPS 2025)
-Status: PRODUCTION READY
+    HRPO-X v1.0.1 (Research Prototype)
+    ==================================
+    Status: Research prototype (single-file implementation)
 
-This module implements the core logic for HRPO-X v1.0.0, integrating 5 critical patches:
-1. [P1] IS Cold Start Stability (Adaptive Epsilon)
-2. [P1] r_min Oscillation Fix (Proportional Control + Momentum)
-3. [P0] Ghost Mode Sample Size (Adaptive Sampling + Bootstrap CI)
-4. [P0] Network Partition Handling (Byzantine Fault Tolerance)
-5. [P2] Task Shift Adaptation (Task-Aware r_min Blending)
+    This module implements a small set of HRPO-inspired components:
+    1. [P1] Adaptive Epsilon Scheduling (importance sampling warmup)
+    2. [P1] r_min Oscillation Fix (proportional control + momentum)
+    3. [P0] Ghost Mode Validation (bootstrap CI)
+    4. [P0] Network Partition Handling (simulated hash coordination)
+    5. [P2] Task Shift Adaptation (task-aware r_min blending)
 
-Author: CLI [^]C01[*]
-Date: 2026-01-06
-"""
+    Note: This is not a verified paper implementation and has no distributed training.
 
-import numpy as np
+    Author: CLI C01
+    Date: 2026-01-06
+    """
+
+
+
+
+import numpy
 import torch
 import torch.nn.functional as F
-from typing import Dict, List, Tuple, Optional, Any
+import typing
 import logging
 import time
 import json
 import math
+import hrpo_paper_core
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -91,7 +95,7 @@ def importance_weighted_hrpo_loss(
     advantages: torch.Tensor,
     step: int,
     config: HRPOConfig
-) -> Tuple[Optional[torch.Tensor], Dict]:
+) -> typing.Tuple[typing.Optional[torch.Tensor], typing.Dict]:
     """
     Computes Eq. 6 with Importance Sampling and Adaptive Clipping.
     """
@@ -154,7 +158,7 @@ class TaskAwareAdaptiveRminController:
         # [Patch #5] Per-task r_min tracking
         self.r_min_per_task = config.default_r_min.copy()
         
-        self.task_history: List[Dict] = []
+        self.task_history: typing.List[typing.Dict] = []
         self.step_count = 0
         
         # [Patch #2] Momentum state
@@ -166,7 +170,7 @@ class TaskAwareAdaptiveRminController:
         self,
         observed_hidden_ratio: float,
         current_query: str
-    ) -> Optional[float]:
+    ) -> typing.Optional[float]:
         """
         Executes one adaptation step.
         """
@@ -208,7 +212,7 @@ class TaskAwareAdaptiveRminController:
         # Update specific task r_min if we have enough samples
         current_task_samples = [h for h in recent if h['task'] == task_type]
         if len(current_task_samples) >= 5:
-             mean_ratio = np.mean([h['hidden_ratio'] for h in current_task_samples])
+             mean_ratio = numpy.mean([h['hidden_ratio'] for h in current_task_samples])
              error = mean_ratio - self.config.target_hidden_ratio
              
              # [Patch #2] Proportional Control
@@ -220,11 +224,11 @@ class TaskAwareAdaptiveRminController:
              self.momentum = total_delta
              
              # Apply bounds
-             delta = np.clip(total_delta, -self.config.max_single_change, self.config.max_single_change)
+             delta = numpy.clip(total_delta, -self.config.max_single_change, self.config.max_single_change)
              
              # Update
              self.r_min_per_task[task_type] += delta
-             self.r_min_per_task[task_type] = np.clip(
+             self.r_min_per_task[task_type] = numpy.clip(
                  self.r_min_per_task[task_type],
                  *self.config.r_min_range
              )
@@ -236,7 +240,7 @@ class TaskAwareAdaptiveRminController:
         )
         
         # Safe clip just in case
-        blended_r_min = np.clip(blended_r_min, *self.config.r_min_range)
+        blended_r_min = numpy.clip(blended_r_min, *self.config.r_min_range)
 
         return blended_r_min
 
@@ -260,14 +264,14 @@ class DistributionalGhostMode:
     """
     def __init__(self, config: HRPOConfig):
         self.config = config
-        self.baseline_metrics: List[Dict] = []
-        self.candidate_metrics: List[Dict] = []
+        self.baseline_metrics: typing.List[typing.Dict] = []
+        self.candidate_metrics: typing.List[typing.Dict] = []
 
     def add_sample(self, baseline_m: Dict, candidate_m: Dict):
         self.baseline_metrics.append(baseline_m)
         self.candidate_metrics.append(candidate_m)
 
-    def run_test(self) -> Tuple[bool, Dict]:
+    def run_test(self) -> typing.Tuple[bool, typing.Dict]:
         """
         Runs the ghost mode validation.
         """
@@ -288,7 +292,7 @@ class DistributionalGhostMode:
         # Check 3: Length Variance
         b_len = [m['length'] for m in self.baseline_metrics]
         c_len = [m['length'] for m in self.candidate_metrics]
-        ratio = np.std(c_len) / (np.std(b_len) + 1e-8)
+        ratio = numpy.std(c_len) / (numpy.std(b_len) + 1e-8)
         pass_var = 0.5 <= ratio <= 2.0
 
         # Overall
@@ -313,15 +317,15 @@ class DistributionalGhostMode:
         kl_samples = []
         for _ in range(n_bootstrap):
             # Resample with replacement
-            b_boot = np.random.choice(baseline_rewards, size=len(baseline_rewards))
-            c_boot = np.random.choice(candidate_rewards, size=len(candidate_rewards))
+            b_boot = numpy.random.choice(baseline_rewards, size=len(baseline_rewards))
+            c_boot = numpy.random.choice(candidate_rewards, size=len(candidate_rewards))
             
             kl = self._compute_kl_divergence(b_boot, c_boot)
             kl_samples.append(kl)
 
-        ci_high = np.percentile(kl_samples, 99.5)
+        ci_high = numpy.percentile(kl_samples, 99.5)
         return {
-            'mean': np.mean(kl_samples),
+            'mean': numpy.mean(kl_samples),
             'ci_high': ci_high
         }
 
@@ -330,8 +334,8 @@ class DistributionalGhostMode:
         min_val = min(min(p_samples), min(q_samples))
         max_val = max(max(p_samples), max(q_samples))
         
-        p_hist, _ = np.histogram(p_samples, bins=bins, range=(min_val, max_val), density=True)
-        q_hist, _ = np.histogram(q_samples, bins=bins, range=(min_val, max_val), density=True)
+        p_hist, _ = numpy.histogram(p_samples, bins=bins, range=(min_val, max_val), density=True)
+        q_hist, _ = numpy.histogram(q_samples, bins=bins, range=(min_val, max_val), density=True)
         
         # Smooth to avoid inf
         p_hist = p_hist + 1e-8
@@ -341,15 +345,15 @@ class DistributionalGhostMode:
         p_hist /= p_hist.sum()
         q_hist /= q_hist.sum()
         
-        return np.sum(p_hist * np.log(p_hist / q_hist))
+        return numpy.sum(p_hist * numpy.log(p_hist / q_hist))
 
 # ==============================================================================
-# 4. [P0] Network Partition Handling (Byzantine Fault Tolerance)
+# 4. [P0] Network Partition Handling (simulated hash coordination)
 # ==============================================================================
 
 class PolicyHashManager:
     """
-    [ENHANCED] Byzantine fault-tolerant hash distribution.
+    [ENHANCED] Simulated hash coordination (single-process).
     Simulated implementation (Redis replaced with internal state for demo).
     """
 
@@ -370,7 +374,7 @@ class PolicyHashManager:
     def receive_ack(self, worker_id: str, hash_val: str):
         self.worker_acks[worker_id] = hash_val
 
-    def check_partition_health(self, active_workers: List[str]) -> List[str]:
+    def check_partition_health(self, active_workers: typing.List[str]) -> typing.List[str]:
         """
         Identify workers that haven't ACKed the current hash.
         """
@@ -384,7 +388,7 @@ class PolicyHashManager:
             logger.warning(f"Workers failed to ACK hash {self.current_hash[:8]}: {failed}")
         return failed
 
-    def validate_trajectory(self, trajectory_hash: str, worker_id: str) -> Tuple[bool, str]:
+    def validate_trajectory(self, trajectory_hash: str, worker_id: str) -> typing.Tuple[bool, str]:
         """
         Validate trajectory with grace period for stale workers.
         """
@@ -407,6 +411,81 @@ class PolicyHashManager:
             return True, f"lagged_k={lag}"
         else:
             return False, f"too_stale_k={lag}"
+
+# ==============================================================================
+# 5. Paper Alignment Demo (clean-room)
+# ==============================================================================
+
+def paper_alignment_demo(
+    config: typing.Optional[hrpo_paper_core.PaperHRPOConfig] = None,
+    group_size: int = 3,
+    seq_len: int = 5,
+    vocab: int = 16,
+    dim: int = 8,
+) -> typing.Dict[str, float]:
+    """
+    Demonstrate paper-aligned primitives (Eq.3/4/6) in a clean-room way.
+    This is a demo only and does not implement a full training pipeline.
+    """
+    torch.manual_seed(0)
+    cfg = config or hrpo_paper_core.PaperHRPOConfig()
+
+    embedding = torch.randn(vocab, dim)
+    logits = torch.randn(group_size, seq_len, vocab)
+    probs = F.softmax(logits, dim=-1)
+    token_ids = torch.argmax(probs, dim=-1)
+    e_hat = embedding[token_ids]
+
+    h_proj, _ = hrpo_paper_core.project_hidden_to_embedding(logits, embedding, tau=cfg.tau, eps=cfg.eps)
+
+    w_a = torch.randn(dim, dim)
+    b_a = torch.randn(dim)
+    w_x = torch.randn(dim, dim)
+    b_x = torch.randn(dim)
+    lambda_vec = torch.randn(dim)
+
+    think_mask = torch.zeros(group_size, seq_len, dtype=torch.bool)
+    think_mask[:, :-1] = True
+
+    e_next, gates = hrpo_paper_core.hybrid_gating_step(
+        e_hat,
+        h_proj,
+        w_a,
+        b_a,
+        w_x,
+        b_x,
+        lambda_vec,
+        c=cfg.c,
+        think_mask=think_mask,
+    )
+
+    logp = F.log_softmax(logits, dim=-1).gather(-1, token_ids.unsqueeze(-1)).squeeze(-1)
+    ref_logits = torch.randn(group_size, seq_len, vocab)
+    ref_logp = F.log_softmax(ref_logits, dim=-1).gather(-1, token_ids.unsqueeze(-1)).squeeze(-1)
+
+    rewards = torch.linspace(0.0, 1.0, steps=group_size)
+    token_mask = torch.zeros(group_size, seq_len, dtype=torch.bool)
+    token_mask[:, -2:] = True
+
+    loss, metrics = hrpo_paper_core.hrpo_loss(
+        logp,
+        rewards,
+        ref_logp,
+        beta=cfg.beta,
+        eps=cfg.eps,
+        token_mask=token_mask,
+    )
+
+    metrics.update(
+        {
+            "gate_a_mean": float(gates["a_t"].mean().item()),
+            "gate_r_mean": float(gates["r_t"].mean().item()),
+            "gate_i_mean": float(gates["i_t"].mean().item()),
+            "e_next_mean": float(e_next.mean().item()),
+            "loss": float(loss.item()),
+        }
+    )
+    return metrics
 
 # ==============================================================================
 # Main Execution / Demo
@@ -434,8 +513,8 @@ def main():
     
     # Simulate some data
     for _ in range(300):
-        b_m = {'reward': np.random.normal(0.5, 0.1), 'length': 100, 'error': False}
-        c_m = {'reward': np.random.normal(0.55, 0.1), 'length': 105, 'error': False}
+        b_m = {'reward': numpy.random.normal(0.5, 0.1), 'length': 100, 'error': False}
+        c_m = {'reward': numpy.random.normal(0.55, 0.1), 'length': 105, 'error': False}
         ghost.add_sample(b_m, c_m)
         
     passed, res = ghost.run_test()
@@ -444,7 +523,7 @@ def main():
 
     # 3. Hash Manager Demo
     hash_mgr = PolicyHashManager()
-    logger.info("\n--- Testing Network Partition Handling ---")
+    logger.info("\n--- Testing Hash Coordination (simulated) ---")
     
     hash_mgr.update_hash("HASH_V1")
     hash_mgr.receive_ack("worker_1", "HASH_V1")
@@ -456,6 +535,11 @@ def main():
     # Worker 2 sends trajectory with old hash (simulated)
     valid, reason = hash_mgr.validate_trajectory("GENESIS_HASH", "worker_2")
     logger.info(f"Worker 2 Trajectory Validation: {valid} ({reason})")
+
+    # 4. Paper Alignment Demo (clean-room)
+    logger.info("\n--- Paper Alignment Demo (clean-room) ---")
+    paper_metrics = paper_alignment_demo()
+    logger.info(json.dumps(paper_metrics, indent=2))
 
     logger.info("\nHRPO-X v1.0.0 System Ready.")
 

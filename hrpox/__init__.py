@@ -1,7 +1,9 @@
 """
-HRPO-X: Hybrid Reasoning with Policy Optimization
-Production-ready implementation of latent reasoning via RL
-"""
+    HRPO-X: Hybrid Reasoning Research Prototype
+    Single-file prototype exposing core utilities from hrpo_core_v2_2.py.
+    """
+
+
 
 # Import from root-level core module
 import sys
@@ -20,6 +22,28 @@ from hrpo_core_v2_2 import (
     DistributionalGhostMode,
     PolicyHashManager,
 )
+from hrpo_paper_core import (
+    PaperHRPOConfig,
+    project_hidden_to_embedding,
+    hybrid_gating_step,
+    standardize_rewards,
+    hrpo_loss,
+)
+from hrpo_paper_trainer import (
+    PaperTrainerConfig,
+    PromptSample,
+    PromptDataset,
+    ListPromptDataset,
+    ToyPromptDataset,
+    RewardEvaluator,
+    ExactMatchRewardEvaluator,
+    TargetTokenRewardEvaluator,
+    CallableRewardEvaluator,
+    RolloutBatch,
+    RolloutBuffer,
+    PaperHRPOTrainer,
+    run_full_trainer_demo,
+)
 
 __version__ = "1.0.1"
 __all__ = [
@@ -29,4 +53,22 @@ __all__ = [
     "TaskAwareAdaptiveRminController",
     "DistributionalGhostMode",
     "PolicyHashManager",
+    "PaperHRPOConfig",
+    "project_hidden_to_embedding",
+    "hybrid_gating_step",
+    "standardize_rewards",
+    "hrpo_loss",
+    "PaperTrainerConfig",
+    "PromptSample",
+    "PromptDataset",
+    "ListPromptDataset",
+    "ToyPromptDataset",
+    "RewardEvaluator",
+    "ExactMatchRewardEvaluator",
+    "TargetTokenRewardEvaluator",
+    "CallableRewardEvaluator",
+    "RolloutBatch",
+    "RolloutBuffer",
+    "PaperHRPOTrainer",
+    "run_full_trainer_demo",
 ]

@@ -1,12 +1,17 @@
-"""HRPO-X Training Infrastructure"""
-__version__ = "1.0.0"
+"""
+HRPO-X Training Package
+=======================
 
-from .trainer import HRPOTrainer
-from .rollout_worker import RolloutWorker
-from .metrics import MetricsCollector
+NOTE: This package is currently a placeholder.
+Actual training components are demonstrated in hrpo_core_v2_2.py
 
-__all__ = [
-    'HRPOTrainer',
-    'RolloutWorker',
-    'MetricsCollector',
-]
+For integration with real training frameworks (PyTorch Lightning, etc.),
+see examples/simple_demo.py for usage patterns.
+"""
+
+__version__ = "1.0.1"
+
+# TODO: Implement actual training infrastructure if needed
+# Currently, this is just a placeholder for future development
+
+__all__ = []

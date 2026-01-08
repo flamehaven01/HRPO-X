@@ -1,22 +1,21 @@
 """
-HRPO-X v1.0.1 - Extension Validators
-====================================
-Validates production patch behavior
+    HRPO-X v1.0.1 - Extension Validators
+    ====================================
+    Validates prototype patch behavior.
+    These utilities are optional and used for development checks.
+    """
 
-Ensures that all 5 production patches (P0-P2) operate correctly
-and maintain their intended properties.
-"""
+
 
 import torch
 import logging
 from typing import Dict, List, Optional, Tuple
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
 
 class PatchValidator:
-    """Validates production patch behavior"""
+    """Validates prototype patch behavior"""
     
     def __init__(self, strict: bool = False):
         """
@@ -74,7 +73,7 @@ class PatchValidator:
             self._handle_violation("[P1-IS] Negative importance ratio detected")
         
         # Check 2: Epsilon is in valid range for adaptive scheduling
-        epsilon_valid = 0.05 <= epsilon <= 1.0  # From paper: 0.5 -> 0.2
+        epsilon_valid = 0.05 <= epsilon <= 1.0  # Default schedule: 0.5 -> 0.2
         diagnostics['epsilon'] = epsilon
         diagnostics['epsilon_valid'] = epsilon_valid
         

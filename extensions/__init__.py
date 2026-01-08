@@ -1,15 +1,21 @@
-"""HRPO-X Extensions Package - Production Enhancements"""
-__version__ = "1.0.0"
+"""
+HRPO-X Extensions Package - Validation Utilities
+=================================================
 
-from .importance_sampling import importance_weighted_hrpo_loss, adaptive_epsilon_schedule
-from .adaptive_rmin import TaskAwareAdaptiveRminController
-from .ghost_mode import DistributionalGhostMode
-from .hash_manager import PolicyHashManager
+This package contains validation utilities for production patches.
+These are OPTIONAL helpers for development and debugging.
+
+For actual extension implementations, see: hrpo_core_v2_2.py
+"""
+
+__version__ = "1.0.1"
+
+# Note: Extension implementations (IS, adaptive_rmin, ghost_mode, hash_manager)
+# are in hrpo_core_v2_2.py, not in separate files.
+# This package only contains validation utilities.
+
+from .validators import PatchValidator
 
 __all__ = [
-    'importance_weighted_hrpo_loss',
-    'adaptive_epsilon_schedule',
-    'TaskAwareAdaptiveRminController',
-    'DistributionalGhostMode',
-    'PolicyHashManager',
+    'PatchValidator',
 ]

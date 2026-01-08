@@ -1,7 +1,9 @@
 """
-STEM Task Configuration
-Optimized for mathematical reasoning and code generation
+Sample configuration for potential future training experiments.
+Not used by the current single-file prototype.
 """
+
+
 
 # Inherit from base config
 _base_: base_config.yaml

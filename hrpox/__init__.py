@@ -33,7 +33,7 @@ from .paper_trainer import (
     run_full_trainer_demo,
 )
 
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 __all__ = [
     "HRPOConfig",
     "adaptive_epsilon_schedule",

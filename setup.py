@@ -8,7 +8,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="hrpo-x",
-    version="1.0.1",
+    version="1.1.0",
     author="CLI C01",
     author_email="cli@flamehaven.io",
     description="HRPO-X: hybrid reasoning research prototype",

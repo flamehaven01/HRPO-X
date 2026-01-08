@@ -8,7 +8,7 @@ These are OPTIONAL helpers for development and debugging.
 For actual extension implementations, see: hrpox/core_v2_2.py
 """
 
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 
 # Note: Extension implementations (IS, adaptive_rmin, ghost_mode, hash_manager)
 # are in hrpox/core_v2_2.py, not in separate files.

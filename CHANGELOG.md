@@ -1,16 +1,40 @@
 # Changelog
 
 All notable changes to HRPO-X will be documented in this file.
-
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [1.1.0] - 2026-01-08
+
+### Added
+- Clean-room paper primitives (Eq3/Eq4/Eq6) as package modules: hrpox/paper_core.py
+- Mini pipeline and full trainer scaffold: hrpox/paper_pipeline.py, hrpox/paper_trainer.py
+- Paper-alignment tests: test_paper_core.py, test_paper_pipeline.py, test_paper_trainer.py, test_paper_integration.py
+- roadmap.md with productionization targets
+
+### Changed
+- Reorganized modules into the hrpox package (core moved to hrpox/core_v2_2.py)
+- README simplified and linked to roadmap.md
+- Documentation updated to reflect new module locations (ARCHITECTURE, PAPER_TO_CODE_MAP)
+- setup.py now uses find_packages; setup_and_verify runs the module entry point
+- Examples updated to point to hrpox/core_v2_2.py
+
+### Removed
+- README_HONEST.md, REFACTORING_COMPLETE.md, v1.0.1_PLAN.md (obsolete)
+
+### Fixed
+- Typing annotations in hrpox/core_v2_2.py to avoid NameError during test collection
+
+### Verified
+- pytest tests/ -v (22 passed)
 
 ---
 
 ## [1.0.1] - 2026-01-08
 
 ### Changed - Honesty Refactoring
-
 This release removes exaggerated claims and aligns documentation with actual implementation.
 
 **Documentation Updates:**
@@ -46,7 +70,7 @@ This release removes exaggerated claims and aligns documentation with actual imp
 ### Status
 
 **What Works:**
-- ✓ Adaptive epsilon scheduling (warmup 0.5 → 0.2)
+- ✓ Adaptive epsilon scheduling (warmup 0.5 -> 0.2)
 - ✓ Importance sampling with KL rejection
 - ✓ Task-aware adaptive r_min controller
 - ✓ Bootstrap confidence interval validation
@@ -89,6 +113,6 @@ See v1.0.1 for honest documentation.
 
 **v1.0.0:** Over-promised, under-documented reality
 **v1.0.1:** Honest documentation matching actual implementation
+**v1.1.0:** Paper scaffold added, modules reorganized under hrpox, roadmap added
 
-The core algorithm remains unchanged and functional across both versions.
-Only documentation and cleanup were changed in v1.0.1.
+The core prototype remains functional; v1.1.0 adds paper-aligned scaffolding and reorganizes the package layout.

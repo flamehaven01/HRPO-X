@@ -9,7 +9,7 @@ For integration with real training frameworks (PyTorch Lightning, etc.),
 see examples/simple_demo.py for usage patterns.
 """
 
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 
 # TODO: Implement actual training infrastructure if needed
 # Currently, this is just a placeholder for future development

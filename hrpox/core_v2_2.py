@@ -267,7 +267,7 @@ class DistributionalGhostMode:
         self.baseline_metrics: typing.List[typing.Dict] = []
         self.candidate_metrics: typing.List[typing.Dict] = []
 
-    def add_sample(self, baseline_m: Dict, candidate_m: Dict):
+    def add_sample(self, baseline_m: typing.Dict, candidate_m: typing.Dict):
         self.baseline_metrics.append(baseline_m)
         self.candidate_metrics.append(candidate_m)
 
@@ -306,7 +306,7 @@ class DistributionalGhostMode:
             'passed': bool(passed)
         }
 
-    def _bootstrap_kl_confidence(self, n_bootstrap: int = 1000) -> Dict:
+    def _bootstrap_kl_confidence(self, n_bootstrap: int = 1000) -> typing.Dict:
         """Bootstrap confidence interval for KL divergence."""
         baseline_rewards = [m['reward'] for m in self.baseline_metrics]
         candidate_rewards = [m['reward'] for m in self.candidate_metrics]
